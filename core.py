@@ -6,7 +6,7 @@ def welcome(uid):
         "This is your direct line to me.\n\n"
         "Found a bug? Have an idea? Or just want to share your feedback? "
         "Send it here. I review every message personally.\n\n"
-        "<i>Note: 3 messages per day limit to keep the focus sharp.</i>"
+        "<i>Note: 5 messages per day limit to keep the focus sharp.</i>"
     )
 
 
