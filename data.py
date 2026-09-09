@@ -32,7 +32,7 @@ class Database:
 
     #time
     @connection_lock
-    def count_recent_tickets(self, user_id, hours=24):
+    def count_recent_tickets(self, user_id, hours=12):
         with self.conn:
             cursor = self.conn.execute(f"SELECT COUNT(*) FROM tickets WHERE user_id = ? AND timestamp > datetime('now', '-{hours} hours')", (user_id,))
             return cursor.fetchone()[0]

@@ -15,19 +15,21 @@ def scheduler_loop():
         if now.hour == 19 and now.minute == 0:
             tickets = db.get_todays_tickets()
             summary = ai_engine.generate_daily_summary(tickets)
-            bot.send_message(ADMIN_ID, f"📊 <b>Ежедневная сводка Vancore</b>\n\n{summary}", parse_mode="HTML")
+            bot.send_message(ADMIN_ID, f"📊 Ежедневная сводка Vancore\n\n{summary}")
             time.sleep(61) 
         time.sleep(30)
 
 def is_flooding(uid):
+    if uid == ADMIN_ID: 
+        return False
     limit = 5
     count = db.count_recent_tickets(uid)
     if count >= limit:
         text = (
             "<b>Daily Limit Reached</b>\n\n"
-            "You've sent 3 messages today. I limit this to ensure I can "
+            "You've sent 5 messages today. I limit this to ensure I can "
             "provide quality responses to everyone.\n\n"
-            "Try again in 24 hours. See you then."
+            "Try again in 12 hours. See you then."
         )
         bot.send_message(uid, text, parse_mode="HTML")
         return True
@@ -84,7 +86,7 @@ def all_handler(message):
         reply = ai_res.get("reply")
         category = ai_res.get("category")
         should_notify = ai_res.get("notify_admin")
-        bot.send_message(uid, reply, parse_mode="HTML")
+        bot.send_message(uid, reply)
         if should_notify:
             admin_msg = (
                 f"📩 New Insight\n"
