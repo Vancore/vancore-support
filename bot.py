@@ -15,7 +15,7 @@ def scheduler_loop():
         if now.hour == 19 and now.minute == 0:
             tickets = db.get_todays_tickets()
             summary = ai_engine.generate_daily_summary(tickets)
-            bot.send_message(ADMIN_ID, f"📊 Ежедневная сводка Vancore\n\n{summary}")
+            bot.send_message(ADMIN_ID, f"📊 Vancore Daily Summary\n\n{summary}")
             time.sleep(61) 
         time.sleep(30)
 
@@ -41,7 +41,7 @@ def start_handler(message):
     uid = message.chat.id
     if is_flooding(uid): return
     db.add_user(uid, message.from_user.username)
-    text = core.welcome(uid)
+    text = core.welcome()
     bot.send_message(uid, text, parse_mode="HTML")
 
 
@@ -86,8 +86,9 @@ def all_handler(message):
         reply = ai_res.get("reply")
         category = ai_res.get("category")
         should_notify = ai_res.get("notify_admin")
-        bot.send_message(uid, reply)
         if should_notify:
+            text = core.ticket_received()
+            bot.send_message(uid, text, parse_mode="HTML")
             admin_msg = (
                 f"📩 New Insight\n"
                 f"From: {full_name} @{username}\n"
@@ -100,6 +101,8 @@ def all_handler(message):
             bot.send_message(ADMIN_ID, admin_msg)
             #text = core.ticket_received(uid)
             #bot.send_message(uid, text, parse_mode="HTML")
+        else:
+            bot.send_message(uid, reply)
     else:
         bot.send_message(uid, core.ticket_received(uid), parse_mode="HTML")
         admin_msg = (

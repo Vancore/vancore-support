@@ -1,6 +1,6 @@
 from data import db
 
-def welcome(uid):
+def welcome():
     return (
         "<b>Vancore Support</b>\n\n"
         "This is your direct line to me.\n\n"
@@ -9,7 +9,7 @@ def welcome(uid):
     )
 
 
-def ticket_received(uid):
+def ticket_received():
     return (
         "<b>Message Delivered</b>\n\n"
         "Your thoughts have been sent directly to the developer. "
