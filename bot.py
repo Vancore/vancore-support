@@ -26,10 +26,10 @@ def is_flooding(uid):
     count = db.count_recent_tickets(uid)
     if count >= limit:
         text = (
-            "<b>Daily Limit Reached</b>\n\n"
-            "You've sent 5 messages today. I limit this to ensure I can "
-            "provide quality responses to everyone.\n\n"
-            "Try again in 12 hours. See you then."
+            "<b>Limit Reached</b>\n\n"
+            "You’ve reached the 5-message threshold. "
+            "I cap transmissions to ensure every insight and bug report gets the focus it deserves.\n\n"
+            "The line will reopen in 12 hours."
         )
         bot.send_message(uid, text, parse_mode="HTML")
         return True
