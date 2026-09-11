@@ -15,7 +15,7 @@ def scheduler_loop():
         if now.hour == 19 and now.minute == 0:
             tickets = db.get_todays_tickets()
             summary = ai_engine.generate_daily_summary(tickets)
-            bot.send_message(ADMIN_ID, f"📊 Vancore Daily Summary\n\n{summary}")
+            bot.send_message(ADMIN_ID, f"{summary}")
             time.sleep(61) 
         time.sleep(30)
 
