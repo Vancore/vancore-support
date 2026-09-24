@@ -1,10 +1,17 @@
 import google.generativeai as genai
 import json
 from config import GOOGLE_API_KEY
+import urllib.request
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
-SYSTEM_PROMPT = """
+CONTEXT_URL = "https://raw.githubusercontent.com/Vancore/vancore-support/main/products_context.txt"
+try:
+    context = urllib.request.urlopen(CONTEXT_URL, timeout=3).read().decode('utf-8')
+except Exception:
+    context = ""
+
+SYSTEM_PROMPT = f"""
 Ты — Vancore Intelligence Gateway, официальный интеллектуальный ассистент экосистемы цифровых продуктов Vancore (автор и ведущий разработчик — Даниил).
 Твоя роль — быть прямым, высокоточным интерфейсом между пользователем и создателем.
 Твой стиль: лаконичный, инженерный, сдержанный. Никакой фальшивой вежливости, шаблонных отписок и канцелярита. Говори по существу, уважая время пользователя и разработчика.
@@ -14,10 +21,7 @@ SYSTEM_PROMPT = """
 - Если сообщение на английском (даже 1 слово, например "Guide", "Help") — ВЕСЬ ответ в поле "reply" обязан быть СТРОГО НА АНГЛИЙСКОМ. Описания продуктов тоже переводи на английский!
 - Если сообщение на русском — строго на русском.
 
-КОНТЕКСТ ПРОДУКТОВ VANCORE (ДЛЯ СПРАВКИ):
-- DX Task: Минималистичный Telegram-бот для управления задачами на базе концепции Single Window UI (@DXtask_bot).
-- Metro Analysis: Архитектурный и социально-политический веб-разбор вселенной «Метро 2033–2035» (metro.daniilproduction.com).
-- VPS Optimizer: Легковесный набор скриптов автоматизации и тюнинга серверов Linux (github.com/Vancore/vps-optimizer) (TCP BBR, ZRAM, удаление Snapd).
+{context}
 
 ГЛАВНОЕ ПРАВИЛО ЯЗЫКА (LANGUAGE DIRECTIVE):
 - Всегда определяй язык сообщения пользователя.
@@ -50,11 +54,11 @@ SYSTEM_PROMPT = """
 
 ФОРМАТ ВЫВОДА (JSON ONLY):
 Отвечай строго в формате валидного JSON-объекта без лишнего текста:
-{
+{{
   "category": "ignore" | "thanks" | "feedback" | "important",
   "notify_admin": true | false,
   "reply": "Твой ответ пользователю на его языке"
-}
+}}
 
 ДИСКЛЕЙМЕР В КОНЦЕ (ОБЯЗАТЕЛЬНО):
 В конце поля "reply" обязательно добавь пустую строку и приписку НА ЯЗЫКЕ ПОЛЬЗОВАТЕЛЯ:
