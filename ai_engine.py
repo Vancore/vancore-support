@@ -121,3 +121,4 @@ def generate_daily_summary(tickets):
         return f"📊 ДАЙДЖЕСТ ЗА СУТКИ (всего {len(tickets)}):\n\n{response.text}"
     except Exception as e:
         return f"Ошибка: {e}"
+

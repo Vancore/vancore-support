@@ -6,6 +6,7 @@ import ai_engine
 import threading
 import time
 import datetime
+import importlib
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -43,6 +44,16 @@ def start_handler(message):
     db.add_user(uid, message.from_user.username)
     text = core.welcome()
     bot.send_message(uid, text, parse_mode="HTML")
+
+
+@bot.message_handler(commands=["reload"])
+def cmd_reload(message):
+    if message.from_user.id == int(ADMIN_ID):
+        try:
+            importlib.reload(ai_engine)
+            bot.reply_to(message, "✅ Successfully rebooted!")
+        except Exception as e:
+            bot.reply_to(message, f"❌ Update error: {e}")
 
 
 @bot.message_handler(func=lambda message: message.reply_to_message is not None)
